@@ -27,6 +27,8 @@ private:
 
     void tokenizeOperator();
 
+    void tokenizeWord();
+
     void step(unsigned long step);
 
     char next();

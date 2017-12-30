@@ -6,9 +6,7 @@
 #include "ast/NumberExpression.h"
 #include "ast/UnaryExpression.h"
 #include "ast/BinaryExpression.h"
-
-#include <utility>
-#include <stdexcept>
+#include "ast/ConstantExpression.h"
 
 using std::vector;
 
@@ -100,6 +98,9 @@ Expression *Parser::primary() {
     }
     if (match(Token::HEX_NUMBER)) {
         return new NumberExpression(std::stol(current->getText(), nullptr, 16));
+    }
+    if (match(Token::WORD)){
+        return new ConstantExpression(current->getText());
     }
     if (match(Token::LPAREN)) {
         Expression *result = expression();

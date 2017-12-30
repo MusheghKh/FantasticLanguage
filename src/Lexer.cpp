@@ -29,6 +29,8 @@ std::vector<Token *> &Lexer::tokenize() {
             } else {
                 tokenizeNumber();
             }
+        } else if (isalpha(current)){
+            tokenizeWord();
         }
         else if (OPERATOR_CHARS.find(current) != -1) {
             tokenizeOperator();
@@ -43,7 +45,15 @@ std::vector<Token *> &Lexer::tokenize() {
 void Lexer::tokenizeNumber() {
     stringstream ss;
     char current = peek(0);
-    while (isdigit(current)) {
+    while (true){
+        if (current == '.'){
+            // TODO make something normal than .str()
+            if(ss.str().find('.') != -1){
+                throw std::runtime_error("Invalid float number");
+            }
+        } else if(!isdigit(current)){
+            break;
+        }
         ss << current;
         current = next();
     }
@@ -71,6 +81,19 @@ void Lexer::tokenizeOperator() {
     unsigned long position = OPERATOR_CHARS.find(peek(0));
     addToken(OPERATOR_TOKENS[position]);
     step(1);
+}
+
+void Lexer::tokenizeWord() {
+    stringstream ss;
+    char current = peek(0);
+    while (true){
+        if (!(isdigit(current) || isalpha(current)) && current != '_' && current != '$'){
+            break;
+        }
+        ss << current;
+        current = next();
+    }
+    addToken(Token::WORD, ss.str());
 }
 
 void Lexer::step(unsigned long step) {

@@ -17,6 +17,7 @@ const std::string Token::toString() {
     switch (type){
         case NUMBER: ss << "NUMBER "; break;
         case HEX_NUMBER: ss << "HEX_NUMBER 0x"; break;
+        case WORD: ss << "WORD "; break;
         case PLUS: ss << "PLUS "; break;
         case MINUS: ss << "MINUS "; break;
         case STAR: ss << "STAR "; break;

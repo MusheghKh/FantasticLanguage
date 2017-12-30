@@ -5,6 +5,7 @@
 #include "src/ast/Expression.h"
 #include "src/Lexer.h"
 #include "src/Parser.h"
+#include "src/lib/Constants.h"
 
 using std::string;
 using std::vector;
@@ -14,8 +15,7 @@ using std::endl;
 int main() {
 
     const string input1 = "2 + 2";
-    const string input2 = "(2 + 2) * 0xf";
-
+    const string input2 = "(PI + 2) * 0xf";
     Lexer lexer(input2);
     const vector<Token*> tokens = lexer.tokenize();
     for (auto token = tokens.begin(); token < tokens.end(); ++token) {
