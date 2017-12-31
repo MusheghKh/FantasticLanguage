@@ -2,22 +2,24 @@
 // Created by max on 12/31/17.
 //
 
-#include "ConstantExpression.h"
-#include "../lib/Constants.h"
+#include "VariableExpression.h"
+#include "../lib/Variables.h"
 
 #include <string>
 
 using std::string;
 
-ConstantExpression::ConstantExpression(const string& nameIn) : name(nameIn) {}
-
-double ConstantExpression::eval() {
-    if (!Constants::instance().constantExists(name)){
-        throw std::runtime_error("Constant does not exists");
-    }
-    return Constants::instance().getConstant(name);
+VariableExpression::VariableExpression(const string& nameIn) : name(nameIn) {
+    std::cout << "const" << std::endl;
 }
 
-const string ConstantExpression::toString() {
+double VariableExpression::eval() {
+    if (!Variables::instance().exist(name)){
+        throw std::runtime_error("Constant does not exists");
+    }
+    return Variables::instance().get(name);
+}
+
+const string VariableExpression::toString() {
     return name;
 }

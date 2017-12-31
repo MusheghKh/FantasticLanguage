@@ -12,7 +12,23 @@ Token::Token(Token::TokenType typeIn, const std::string& textIn) : text(textIn),
 
 }
 
-const std::string Token::toString() {
+const std::string Token::typeToString(TokenType typeIn) {
+    switch (typeIn){
+        case NUMBER: return  "NUMBER";
+        case HEX_NUMBER: return  "HEX_NUMBER";
+        case WORD: return "WORD";
+        case PLUS: return  "PLUS";
+        case MINUS: return "MINUS";
+        case STAR: return "STAR";
+        case SLASH: return "SLASH";
+        case EQ: return "EQ";
+        case LPAREN: return "LPAREN";
+        case RPAREN: return "RPAREN";
+        case TOKEN_EOF: return "EOF";
+    }
+}
+
+const std::string Token::toString() const {
     stringstream ss;
     switch (type){
         case NUMBER: ss << "NUMBER "; break;
@@ -22,6 +38,7 @@ const std::string Token::toString() {
         case MINUS: ss << "MINUS "; break;
         case STAR: ss << "STAR "; break;
         case SLASH: ss << "SLASH "; break;
+        case EQ: ss << "EQ "; break;
         case LPAREN: ss << "LPAREN "; break;
         case RPAREN: ss << "RPAREN "; break;
         case TOKEN_EOF: ss << "EOF "; break;

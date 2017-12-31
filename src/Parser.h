@@ -9,6 +9,7 @@
 #include <vector>
 #include "Token.h"
 #include "ast/Expression.h"
+#include "ast/Statement.h"
 
 class Parser {
 public:
@@ -17,9 +18,13 @@ public:
 
     ~Parser();
 
-    const std::vector<Expression*>& parse();
+    const std::vector<Statement*>& parse();
 
 private:
+
+    Statement* statement();
+
+    Statement* assignmentStatement();
 
     Expression * expression();
 
@@ -31,6 +36,8 @@ private:
 
     Expression * primary();
 
+    const Token * consume(Token::TokenType type);
+
     bool match(Token::TokenType type);
 
     const Token * get(unsigned long relativePosition);
@@ -40,7 +47,7 @@ private:
     const unsigned long size = tokens.size();
 
     /// Variables
-    std::vector<Expression*> expressions;
+    std::vector<Statement*> statements;
     unsigned long pos = 0;
 };
 

@@ -21,6 +21,7 @@ public:
         MINUS,  /// -
         STAR,   /// *
         SLASH,  /// /
+        EQ,     /// =
 
         LPAREN, /// (
         RPAREN, /// )
@@ -44,7 +45,9 @@ public:
         return text;
     }
 
-    const std::string toString();
+    static const std::string typeToString(TokenType);
+
+    const std::string toString() const;
 
 private:
     /// Private Constructor

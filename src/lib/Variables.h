@@ -10,30 +10,31 @@
 
 #include <cmath>
 
-class Constants{
+class Variables{
 public:
 
-    static Constants& instance(){
-        static Constants s;
+    static Variables& instance(){
+        static Variables s;
         return s;
     }
 
-    bool constantExists(const std::string &key);
+    bool exist(const std::string &key);
 
-    double getConstant(const std::string &key);
+    double get(const std::string &key);
 
+    void set(const std::string &key, double value);
+
+    /// DISABLE COPY
+    Variables(Variables const&) = delete;
+    Variables& operator= (Variables const&) = delete;
 
 private:
     /// PRIVATE CONSTRUCTOR, DESTRUCTOR
-    Constants() = default;
-    ~Constants() = default;
-
-    /// DISABLE COPY
-    Constants(Constants const&) = delete;
-    Constants& operator= (Constants const&) = delete;
+    Variables() = default;
+    ~Variables() = default;
 
     /// Variables
-    std::map<std::string, double> constants = {
+    std::map<std::string, double> variables = {
             {"PI", M_PI},
             {"E", M_E}
     };

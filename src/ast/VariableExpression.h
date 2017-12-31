@@ -8,13 +8,13 @@
 #include <iostream>
 #include "Expression.h"
 
-class ConstantExpression : public Expression{
+class VariableExpression : public Expression{
 public:
 
-    explicit ConstantExpression(const std::string& string);
+    explicit VariableExpression(const std::string& string);
 
-    ~ConstantExpression() override{
-        std::cout << "destruct ConstantExpression" << std::endl;
+    ~VariableExpression() override{
+        std::cout << "destruct VariableExpression : " << name << std::endl;
     };
 
     double eval() override;
