@@ -14,11 +14,11 @@
 class Lexer {
 public:
 
-    explicit Lexer(const std::string& inputIn);
+    explicit Lexer(std::string inputIn);
 
     ~Lexer();
 
-    std::vector<Token*> & tokenize();
+    const std::vector<Token*> & tokenize();
 private:
 
     void tokenizeNumber();
@@ -28,6 +28,8 @@ private:
     void tokenizeOperator();
 
     void tokenizeWord();
+
+    void tokenizeText();
 
     void step(unsigned long step);
 
@@ -40,7 +42,7 @@ private:
     }
 
     void addToken(Token::TokenType type, const std::string &text){
-        tokens.push_back(Token::makeNew(type, text));
+        tokens.push_back(Token::New(type, text));
     }
 
     /// Static method

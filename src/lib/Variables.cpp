@@ -8,13 +8,13 @@ bool Variables::exist(const std::string &key) {
     return variables.find(key) != variables.end();
 }
 
-double Variables::get(const std::string &key) {
+const Value * Variables::get(const std::string &key) {
     if (!exist(key)){
-        return 0;
+        return ZERO;
     }
     return variables.at(key);
 }
 
-void Variables::set(const std::string &key, double value) {
+void Variables::set(const std::string &key, const Value *value) {
     variables.insert({key, value});
 }

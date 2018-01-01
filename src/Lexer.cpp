@@ -9,17 +9,17 @@
 using std::string;
 using std::stringstream;
 
-Lexer::Lexer(const std::string& inputIn) : input(inputIn) {
+Lexer::Lexer(std::string inputIn) : input(std::move(inputIn)) {
 }
 
 Lexer::~Lexer() {
-//    for (auto i = tokens.begin(); i < tokens.end(); ++i) {
-//        delete *i;
-//    }
+    for (auto token = tokens.begin(); token < tokens.end(); ++token) {
+        delete *token;
+    }
     std::cout << "destruct Lexer" << std::endl;
 }
 
-std::vector<Token *> &Lexer::tokenize() {
+const std::vector<Token *> &Lexer::tokenize() {
     while (pos < length) {
         const char current = peek(0);
         if (isdigit(current)) {
@@ -29,10 +29,11 @@ std::vector<Token *> &Lexer::tokenize() {
             } else {
                 tokenizeNumber();
             }
-        } else if (isalpha(current)){
+        } else if (isalpha(current)) {
             tokenizeWord();
-        }
-        else if (OPERATOR_CHARS.find(current) != -1) {
+        } else if (current == '"') {
+            tokenizeText();
+        } else if (OPERATOR_CHARS.find(current) != -1) {
             tokenizeOperator();
         } else {
             // whitespaces
@@ -45,13 +46,13 @@ std::vector<Token *> &Lexer::tokenize() {
 void Lexer::tokenizeNumber() {
     stringstream ss;
     char current = peek(0);
-    while (true){
-        if (current == '.'){
+    while (true) {
+        if (current == '.') {
             // TODO make something normal than .str()
-            if(ss.str().find('.') != -1){
+            if (ss.str().find('.') != -1) {
                 throw std::runtime_error("Invalid float number");
             }
-        } else if(!isdigit(current)){
+        } else if (!isdigit(current)) {
             break;
         }
         ss << current;
@@ -86,15 +87,57 @@ void Lexer::tokenizeOperator() {
 void Lexer::tokenizeWord() {
     stringstream ss;
     char current = peek(0);
-    while (true){
-        if (!(isdigit(current) || isalpha(current)) && current != '_' && current != '$'){
+    while (true) {
+        if (!(isdigit(current) || isalpha(current)) && current != '_' && current != '$') {
             break;
         }
         ss << current;
         current = next();
     }
-    addToken(Token::WORD, ss.str());
+
+    const string word = ss.str();
+    if (word == "print") {
+        addToken(Token::PRINT);
+    } else {
+        addToken(Token::WORD, word);
+    }
 }
+
+void Lexer::tokenizeText() {
+    step(1);
+    stringstream ss;
+    char currnet = peek(0);
+    while (true) {
+        if (currnet == '\\') {
+            currnet = next();
+            switch (currnet) {
+                case '"':
+                    currnet = next();
+                    ss << '"';
+                    continue;
+                case 'n':
+                    currnet = next();
+                    ss << '\n';
+                    continue;
+                case 't':
+                    currnet = next();
+                    ss << '\t';
+                    continue;
+            }
+            ss << '\\';
+            continue;
+        }
+        if (currnet == '"') {
+            break;
+        }
+        ss << currnet;
+        currnet = next();
+    }
+    next();
+
+    addToken(Token::TEXT, ss.str());
+}
+
 
 void Lexer::step(unsigned long step) {
     pos += step;

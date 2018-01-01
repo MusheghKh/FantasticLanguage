@@ -11,7 +11,7 @@
 class BinaryExpression : public Expression{
 public:
 
-    BinaryExpression(char operationIn, Expression* expr1In, Expression* expr2In);
+    BinaryExpression(const char operationIn, const Expression* expr1In, const Expression* expr2In);
 
     ~BinaryExpression() override {
         delete expr1;
@@ -19,15 +19,15 @@ public:
         std::cout << "destruct BinaryExpression : " << operation << std::endl;
     }
 
-    double eval() override;
+    const Value * eval() const override;
 
-    const std::string toString() override;
+    const std::string toString() const override;
 
 private:
 
-    Expression* expr1;
-    Expression *expr2;
-    char operation;
+    const Expression* expr1;
+    const Expression *expr2;
+    const char operation;
 };
 
 

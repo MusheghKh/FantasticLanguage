@@ -16,6 +16,10 @@ public:
         NUMBER,
         HEX_NUMBER,
         WORD,
+        TEXT,
+
+        /// Keyword
+        PRINT,
 
         PLUS,   /// +
         MINUS,  /// -
@@ -33,7 +37,7 @@ public:
         std::cout << "destruct Token : " << toString() << std::endl;
     };
 
-    static Token* makeNew(TokenType typeIn, const std::string& textIn){
+    static Token* New(TokenType typeIn, const std::string &textIn){
         return new Token(typeIn, textIn);
     }
 
@@ -51,7 +55,7 @@ public:
 
 private:
     /// Private Constructor
-    Token(TokenType typeIn, const std::string& textIn);
+    Token(TokenType typeIn, std::string textIn);
 
     /// Constants
     const TokenType type;

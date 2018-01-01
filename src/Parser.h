@@ -52,6 +52,6 @@ private:
 };
 
 /// Static
-static const Token *EOF_TOKEN = Token::makeNew(Token::TOKEN_EOF, "");
+static const Token *EOF_TOKEN = Token::New(Token::TOKEN_EOF, "");
 
 #endif //OWNCPP_PARSER_H

@@ -13,21 +13,21 @@
 class AssignmentStatement : public Statement{
 public:
 
-    AssignmentStatement(const std::string& variableIn, Expression* exprIn);
+    AssignmentStatement(std::string variableIn, const Expression* exprIn);
 
     ~AssignmentStatement() override{
         delete expr;
         std::cout << "destruct AssignmentStatement : " << variable << std::endl;
     }
 
-    void execute() override;
+    void execute() const override;
 
-    std::string toString() override;
+    std::string toString() const override;
 
 private:
 
     const std::string variable;
-    Expression* expr;
+    const Expression* expr;
 };
 
 

@@ -3,11 +3,12 @@
 //
 
 #include "Parser.h"
-#include "ast/NumberExpression.h"
 #include "ast/UnaryExpression.h"
 #include "ast/BinaryExpression.h"
 #include "ast/VariableExpression.h"
 #include "ast/AssignmentStatement.h"
+#include "ast/PrintStatement.h"
+#include "ast/ValueExpression.h"
 
 using std::vector;
 using std::string;
@@ -19,9 +20,10 @@ Parser::~Parser() {
     for (auto stat = statements.begin(); stat < statements.end(); ++stat) {
         delete *stat;
     }
-    for (auto token = tokens.begin(); token < tokens.end(); ++token) {
-        delete *token;
-    }
+    /// Tokens will delete in Lexer cause it reference to Lexer value
+//    for (auto token = tokens.begin(); token < tokens.end(); ++token) {
+//        delete *token;
+//    }
     delete EOF_TOKEN;
 
     std::cout << "destruct Parser" << std::endl;
@@ -36,6 +38,9 @@ const std::vector<Statement *>& Parser::parse() {
 }
 
 Statement *Parser::statement() {
+    if (match(Token::PRINT)){
+        return new PrintStatement(expression());
+    }
     return assignmentStatement();
 }
 
@@ -54,46 +59,38 @@ Expression *Parser::expression() {
 }
 
 Expression *Parser::additive() {
-    Expression *result = nullptr;
-    Expression *mult = multiplicative();
+    Expression *result = multiplicative();
 
     while (true) {
         if (match(Token::PLUS)) {
-            result = new BinaryExpression('+', mult, multiplicative());
+            result = new BinaryExpression('+', result, multiplicative());
             continue;
         }
         if (match(Token::MINUS)) {
-            result = new BinaryExpression('-', mult, multiplicative());
+            result = new BinaryExpression('-', result, multiplicative());
             continue;
         }
         break;
     }
-    if (result) {
-        return result;
-    }
-    return mult;
+    return result;
 }
 
 Expression *Parser::multiplicative() {
-    Expression *result = nullptr;
-    Expression *un = unary();
+    Expression *result = unary();
 
     while (true) {
         if (match(Token::STAR)) {
-            result = new BinaryExpression('*', un, unary());
+            result = new BinaryExpression('*', result, unary());
             continue;
         }
         if (match(Token::SLASH)) {
-            result = new BinaryExpression('/', un, unary());
+            result = new BinaryExpression('/', result, unary());
             continue;
         }
         break;
     }
 
-    if (result) {
-        return result;
-    }
-    return un;
+    return result;
 }
 
 Expression *Parser::unary() {
@@ -110,13 +107,16 @@ Expression *Parser::unary() {
 Expression *Parser::primary() {
     const Token *current = get(0);
     if (match(Token::NUMBER)) {
-        return new NumberExpression(std::stod(current->getText()));
+        return new ValueExpression(std::stod(current->getText()));
     }
     if (match(Token::HEX_NUMBER)) {
-        return new NumberExpression(std::stol(current->getText(), nullptr, 16));
+        return new ValueExpression(std::stol(current->getText(), nullptr, 16));
     }
     if (match(Token::WORD)){
         return new VariableExpression(current->getText());
+    }
+    if (match(Token::TEXT)){
+        return new ValueExpression(current->getText());
     }
     if (match(Token::LPAREN)) {
         Expression *result = expression();

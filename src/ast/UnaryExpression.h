@@ -6,6 +6,7 @@
 #define OWNCPP_UNARYEXPRESSION_H
 
 #include "Expression.h"
+#include "../lib/Value.h"
 
 #include <string>
 #include <iostream>
@@ -13,23 +14,23 @@
 class UnaryExpression : public Expression{
 public:
 
-    UnaryExpression(char operationIn, Expression* exprIn);
+    UnaryExpression(char operationIn, const Expression* exprIn);
 
     ~UnaryExpression() override {
         delete expr;
         std::cout << "destruct UnaryExpression : " << operation << std::endl;
     }
 
-    double eval() override;
+    const Value * eval() const override;
 
-    const std::string toString() override {
+    const std::string toString() const override {
         return "" + operation + expr->toString();
     }
 
 private:
 
-    Expression* expr;
-    char operation;
+    const Expression* expr;
+    const char operation;
 };
 
 

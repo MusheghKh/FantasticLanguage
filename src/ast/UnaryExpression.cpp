@@ -3,17 +3,18 @@
 //
 
 #include "UnaryExpression.h"
+#include "../lib/NumberValue.h"
 
-double UnaryExpression::eval() {
+UnaryExpression::UnaryExpression(const char operationIn, const Expression *exprIn)
+        : operation(operationIn), expr(exprIn){
+}
+
+const Value * UnaryExpression::eval() const {
     switch (operation) {
         case '-':
-            return -expr->eval();
+            return new NumberValue(-expr->eval()->asNumber());
         case '+':
         default:
             return expr->eval();
     }
-}
-
-UnaryExpression::UnaryExpression(char operationIn, Expression *exprIn)
-        : operation(operationIn), expr(exprIn){
 }

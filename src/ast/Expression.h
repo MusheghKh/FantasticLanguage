@@ -6,15 +6,16 @@
 #define OWNCPP_EXPRESSION_H
 
 #include <string>
+#include "../lib/Value.h"
 
 class Expression {
 public:
 
     virtual ~Expression() = 0;
 
-    virtual double eval() = 0;
+    virtual const Value * eval() const = 0;
 
-    virtual const std::string toString() = 0;
+    virtual const std::string toString() const = 0;
 };
 
 #endif //OWNCPP_EXPRESSION_H

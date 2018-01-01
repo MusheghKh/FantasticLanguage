@@ -9,6 +9,7 @@
 #include <map>
 
 #include <cmath>
+#include "NumberValue.h"
 
 class Variables{
 public:
@@ -20,9 +21,9 @@ public:
 
     bool exist(const std::string &key);
 
-    double get(const std::string &key);
+    const Value * get(const std::string &key);
 
-    void set(const std::string &key, double value);
+    void set(const std::string &key, const Value * value);
 
     /// DISABLE COPY
     Variables(Variables const&) = delete;
@@ -34,10 +35,12 @@ private:
     ~Variables() = default;
 
     /// Variables
-    std::map<std::string, double> variables = {
-            {"PI", M_PI},
-            {"E", M_E}
+    std::map<std::string, const Value*> variables = {
+            {"PI", new NumberValue(M_PI)},
+            {"E", new NumberValue(M_E)}
     };
 };
+
+static const NumberValue * ZERO = new NumberValue(0);
 
 #endif //OWNCPP_CONSTANTS_H

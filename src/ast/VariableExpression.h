@@ -7,19 +7,20 @@
 
 #include <iostream>
 #include "Expression.h"
+#include "../lib/Value.h"
 
 class VariableExpression : public Expression{
 public:
 
-    explicit VariableExpression(const std::string& string);
+    explicit VariableExpression(std::string string);
 
     ~VariableExpression() override{
         std::cout << "destruct VariableExpression : " << name << std::endl;
     };
 
-    double eval() override;
+    const Value * eval() const override;
 
-    const std::string toString() override;
+    const std::string toString() const override;
 
 private:
     const std::string name;

@@ -11,9 +11,9 @@ class Statement {
 public:
     virtual ~Statement() = 0;
 
-    virtual void execute() = 0;
+    virtual void execute() const = 0;
 
-    virtual std::string toString() = 0;
+    virtual std::string toString() const = 0;
 
 };
 

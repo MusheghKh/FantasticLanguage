@@ -5,21 +5,18 @@
 #include "VariableExpression.h"
 #include "../lib/Variables.h"
 
-#include <string>
-
 using std::string;
 
-VariableExpression::VariableExpression(const string& nameIn) : name(nameIn) {
-    std::cout << "const" << std::endl;
+VariableExpression::VariableExpression(string nameIn) : name(std::move(nameIn)) {
 }
 
-double VariableExpression::eval() {
+const Value * VariableExpression::eval() const {
     if (!Variables::instance().exist(name)){
         throw std::runtime_error("Constant does not exists");
     }
     return Variables::instance().get(name);
 }
 
-const string VariableExpression::toString() {
+const string VariableExpression::toString() const {
     return name;
 }
