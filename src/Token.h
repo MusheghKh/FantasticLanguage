@@ -12,7 +12,7 @@
 class Token {
 public:
 
-    enum TokenType{
+    enum TokenType {
         NUMBER,
         HEX_NUMBER,
         WORD,
@@ -28,8 +28,18 @@ public:
         STAR,   /// *
         SLASH,  /// /
         EQ,     /// =
+        EQEQ,   /// ==
+        EXCL,   /// !
+        EXCLEQ, /// !=
         LT,     /// <
+        LTEQ,   /// <=
         GT,     /// >
+        GTEQ,   /// >=
+
+        BAR,    /// |
+        BARBAR, /// ||
+        AMP,    /// &
+        AMPAMP, /// &&
 
         LPAREN, /// (
         RPAREN, /// )
@@ -37,11 +47,11 @@ public:
         TOKEN_EOF
     };
 
-    ~Token(){
+    ~Token() {
         std::cout << "destruct Token : " << toString() << std::endl;
     };
 
-    static Token* New(TokenType typeIn, const std::string &textIn){
+    static Token *New(TokenType typeIn, const std::string &textIn) {
         return new Token(typeIn, textIn);
     }
 
@@ -49,7 +59,7 @@ public:
         return type;
     }
 
-    const std::string & getText() const {
+    const std::string &getText() const {
         return text;
     }
 

@@ -79,9 +79,28 @@ bool Lexer::isHexNumber(char current) {
 
 
 void Lexer::tokenizeOperator() {
-    unsigned long position = OPERATOR_CHARS.find(peek(0));
-    addToken(OPERATOR_TOKENS[position]);
-    step(1);
+    char current = peek(0);
+    if (current == '/') {
+        if (peek(1) == '/') {
+            step(2);
+            tokenizeComment();
+            return;
+        } else if (peek(1) == '*') {
+            step(2);
+            tokenizeMultilineComment();
+            return;
+        }
+    }
+    stringstream ss;
+    while (true) {
+        const string &text = ss.str();
+        if (OPERATORS.find(text + current) == OPERATORS.end() && !text.empty()) {
+            addToken(OPERATORS.at(text));
+            return;
+        }
+        ss << current;
+        current = next();
+    }
 }
 
 void Lexer::tokenizeWord() {
@@ -96,15 +115,37 @@ void Lexer::tokenizeWord() {
     }
 
     const string word = ss.str();
-    if (word == "print"){
+    if (word == "print") {
         addToken(Token::PRINT);
-    } else if (word == "if"){
+    } else if (word == "if") {
         addToken(Token::IF);
-    } else if(word == "else"){
+    } else if (word == "else") {
         addToken(Token::ELSE);
-    } else{
+    } else {
         addToken(Token::WORD, word);
     }
+}
+
+
+void Lexer::tokenizeComment() {
+    char current = peek(0);
+    string end = "\r\n\0";
+    while (end.find(current) == string::npos) {
+        current = next();
+    }
+}
+
+void Lexer::tokenizeMultilineComment() {
+    char current = peek(0);
+    while (true){
+        if (current == '\0'){
+            throw std::runtime_error("Missing close tag");
+        }
+        if (current == '*' && peek(1) == '/'){
+            break;
+        }
+    }
+    step(2);
 }
 
 void Lexer::tokenizeText() {

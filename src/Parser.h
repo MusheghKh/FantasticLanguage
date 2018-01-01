@@ -30,6 +30,12 @@ private:
 
     Expression * expression();
 
+    Expression * logicalOr();
+
+    Expression * logicalAnd();
+
+    Expression * equality();
+
     Expression * conditional();
 
     Expression * additive();

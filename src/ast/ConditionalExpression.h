@@ -10,7 +10,26 @@
 
 class ConditionalExpression : public Expression{
 public:
-    ConditionalExpression(char operationIn, const Expression *expr1In, const Expression *expr2In);
+
+    enum Operator{
+        PLUS,
+        MINUS,
+        MULTIPLY,
+        DIVIDE,
+
+        EQUALS,
+        NOT_EQUALS,
+
+        LT,
+        LTEQ,
+        GT,
+        GTEQ,
+
+        AND,
+        OR
+    };
+
+    ConditionalExpression(Operator operationIn, const Expression *expr1In, const Expression *expr2In);
 
     ~ConditionalExpression() override;
 
@@ -20,8 +39,10 @@ public:
 
 private:
 
+    static const std::string getOperatorAsString(Operator operationIn) ;
+
     const Expression *expr1, *expr2;
-    const char operation;
+    const Operator operation;
 };
 
 

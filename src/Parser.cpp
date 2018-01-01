@@ -70,23 +70,67 @@ Statement *Parser::ifElse() {
 }
 
 Expression *Parser::expression() {
-    return conditional();
+    return logicalOr();
+}
+
+Expression *Parser::logicalOr() {
+    Expression *result = logicalAnd();
+
+    while (true){
+        if (match(Token::BARBAR)){
+            result = new ConditionalExpression(ConditionalExpression::OR, result, logicalAnd());
+            continue;
+        }
+        break;
+    }
+    return result;
+}
+
+Expression *Parser::logicalAnd() {
+    Expression *result = equality();
+
+    while (true){
+        if (match(Token::AMPAMP)){
+            result = new ConditionalExpression(ConditionalExpression::AND, result, equality());
+            continue;
+        }
+        break;
+    }
+
+    return result;
+}
+
+Expression *Parser::equality() {
+    Expression *result = conditional();
+
+    if (match(Token::EQEQ)){
+        return new ConditionalExpression(ConditionalExpression::EQUALS, result, conditional());
+    }
+    if (match(Token::EXCLEQ)){
+        return new ConditionalExpression(ConditionalExpression::NOT_EQUALS, result, conditional());
+    }
+
+    return result;
 }
 
 Expression *Parser::conditional() {
     Expression *result = additive();
 
     while (true){
-        if (match(Token::EQ)){
-            result = new ConditionalExpression('=', result, additive());
+        if (match(Token::LT)){
+            result = new ConditionalExpression(ConditionalExpression::LT, result, additive());
             continue;
         }
-        if (match(Token::LT)){
-            result = new ConditionalExpression('<', result, additive());
+        if (match(Token::LTEQ)){
+            result = new ConditionalExpression(ConditionalExpression::LTEQ, result, additive());
             continue;
         }
         if (match(Token::GT)){
-            result = new ConditionalExpression('>', result, additive());
+            result = new ConditionalExpression(ConditionalExpression::GT, result, additive());
+            continue;
+        }
+        if (match(Token::GTEQ)){
+            result = new ConditionalExpression(ConditionalExpression::GTEQ, result, additive());
             continue;
         }
         break;

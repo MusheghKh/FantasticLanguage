@@ -10,6 +10,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <map>
 
 class Lexer {
 public:
@@ -30,6 +31,10 @@ private:
     void tokenizeWord();
 
     void tokenizeText();
+
+    void tokenizeComment();
+
+    void tokenizeMultilineComment();
 
     void step(unsigned long step);
 
@@ -58,13 +63,36 @@ private:
 };
 
 /// Static
-static const std::string OPERATOR_CHARS = "+-*/()=<>";
-static const Token::TokenType OPERATOR_TOKENS[9] = {
-        Token::PLUS, Token::MINUS,
-        Token::STAR, Token::SLASH,
-        Token::LPAREN, Token::RPAREN,
-        Token::EQ, Token::LT,
-        Token::GT
+static const std::string OPERATOR_CHARS = "+-*/()=<>!&|";
+//static const Token::TokenType OPERATOR_TOKENS[9] = {
+//        Token::PLUS, Token::MINUS,
+//        Token::STAR, Token::SLASH,
+//        Token::LPAREN, Token::RPAREN,
+//        Token::EQ, Token::LT,
+//        Token::GT
+//};
+static const std::map<std::string, Token::TokenType> OPERATORS = {
+        {"+", Token::PLUS},
+        {"-", Token::MINUS},
+        {"*", Token::STAR},
+        {"/", Token::SLASH},
+        {"(", Token::LPAREN},
+        {")", Token::RPAREN},
+        {"=", Token::EQ},
+        {"<", Token::LT},
+        {">", Token::GT},
+
+        {"!", Token::EXCL},
+        {"&", Token::AMP},
+        {"|", Token::BAR},
+
+        {"==", Token::EQEQ},
+        {"!=", Token::EXCLEQ},
+        {"<=", Token::LTEQ},
+        {">=", Token::GTEQ},
+
+        {"&&", Token::AMPAMP},
+        {"||", Token::BARBAR}
 };
 
 #endif //OWNCPP_LEXER_H
