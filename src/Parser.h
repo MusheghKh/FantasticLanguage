@@ -26,7 +26,11 @@ private:
 
     Statement* assignmentStatement();
 
+    Statement* ifElse();
+
     Expression * expression();
+
+    Expression * conditional();
 
     Expression * additive();
 

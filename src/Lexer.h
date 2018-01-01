@@ -58,12 +58,13 @@ private:
 };
 
 /// Static
-static const std::string OPERATOR_CHARS = "+-*/()=";
-static const Token::TokenType OPERATOR_TOKENS[7] = {
+static const std::string OPERATOR_CHARS = "+-*/()=<>";
+static const Token::TokenType OPERATOR_TOKENS[9] = {
         Token::PLUS, Token::MINUS,
         Token::STAR, Token::SLASH,
         Token::LPAREN, Token::RPAREN,
-        Token::EQ,
+        Token::EQ, Token::LT,
+        Token::GT
 };
 
 #endif //OWNCPP_LEXER_H

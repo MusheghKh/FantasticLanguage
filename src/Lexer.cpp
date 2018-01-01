@@ -96,9 +96,13 @@ void Lexer::tokenizeWord() {
     }
 
     const string word = ss.str();
-    if (word == "print") {
+    if (word == "print"){
         addToken(Token::PRINT);
-    } else {
+    } else if (word == "if"){
+        addToken(Token::IF);
+    } else if(word == "else"){
+        addToken(Token::ELSE);
+    } else{
         addToken(Token::WORD, word);
     }
 }

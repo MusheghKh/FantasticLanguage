@@ -9,6 +9,8 @@
 #include "ast/AssignmentStatement.h"
 #include "ast/PrintStatement.h"
 #include "ast/ValueExpression.h"
+#include "ast/IfStatement.h"
+#include "ast/ConditionalExpression.h"
 
 using std::vector;
 using std::string;
@@ -41,6 +43,9 @@ Statement *Parser::statement() {
     if (match(Token::PRINT)){
         return new PrintStatement(expression());
     }
+    if (match(Token::IF)){
+        return ifElse();
+    }
     return assignmentStatement();
 }
 
@@ -54,9 +59,42 @@ Statement *Parser::assignmentStatement() {
     throw std::runtime_error("Unknown statement");
 }
 
-Expression *Parser::expression() {
-    return additive();
+Statement *Parser::ifElse() {
+    const Expression* condition = expression();
+    const Statement* ifStatement = statement();
+
+    if (match(Token::ELSE)){
+        return new IfStatement(condition, ifStatement, statement());
+    }
+    return new IfStatement(condition, ifStatement);
 }
+
+Expression *Parser::expression() {
+    return conditional();
+}
+
+Expression *Parser::conditional() {
+    Expression *result = additive();
+
+    while (true){
+        if (match(Token::EQ)){
+            result = new ConditionalExpression('=', result, additive());
+            continue;
+        }
+        if (match(Token::LT)){
+            result = new ConditionalExpression('<', result, additive());
+            continue;
+        }
+        if (match(Token::GT)){
+            result = new ConditionalExpression('>', result, additive());
+            continue;
+        }
+        break;
+    }
+
+    return result;
+}
+
 
 Expression *Parser::additive() {
     Expression *result = multiplicative();
