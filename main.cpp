@@ -25,16 +25,12 @@ int main() {
     cout << "********TOKENS END********" << endl << endl;
 
     Parser parser(tokens);
-    const vector<Statement*> statements = parser.parse();
+    const BlockStatement program = parser.parse();
     cout << "********STATEMENTS START********" << endl;
-    for (auto stat = statements.begin(); stat < statements.end(); ++stat) {
-        cout << (*stat)->toString() << endl;
-    }
+    cout << program.toString() << endl;
     cout << "********STATEMENTS END********" << endl << endl;
 
-    for (auto stat = statements.begin(); stat < statements.end(); ++stat) {
-        (*stat)->execute();
-    }
+    program.execute();
 
     cout << endl;
 

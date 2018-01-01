@@ -7,9 +7,11 @@
 
 
 #include <vector>
+
 #include "Token.h"
 #include "ast/Expression.h"
 #include "ast/Statement.h"
+#include "ast/BlockStatement.h"
 
 class Parser {
 public:
@@ -18,33 +20,41 @@ public:
 
     ~Parser();
 
-    const std::vector<Statement*>& parse();
+    const BlockStatement parse();
 
 private:
 
-    Statement* statement();
+    const Statement * block();
 
-    Statement* assignmentStatement();
+    const Statement * statementOrBlock();
 
-    Statement* ifElse();
+    const Statement * statement();
 
-    Expression * expression();
+    const Statement * assignmentStatement();
 
-    Expression * logicalOr();
+    const Statement * ifElse();
 
-    Expression * logicalAnd();
+    const Statement * whileStatement();
 
-    Expression * equality();
+    const Statement * forStatement();
 
-    Expression * conditional();
+    const Expression * expression();
 
-    Expression * additive();
+    const Expression * logicalOr();
 
-    Expression * multiplicative();
+    const Expression * logicalAnd();
 
-    Expression * unary();
+    const Expression * equality();
 
-    Expression * primary();
+    const Expression * conditional();
+
+    const Expression * additive();
+
+    const Expression * multiplicative();
+
+    const Expression * unary();
+
+    const Expression * primary();
 
     const Token * consume(Token::TokenType type);
 
@@ -57,7 +67,6 @@ private:
     const unsigned long size = tokens.size();
 
     /// Variables
-    std::vector<Statement*> statements;
     unsigned long pos = 0;
 };
 

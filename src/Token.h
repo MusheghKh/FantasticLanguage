@@ -22,6 +22,8 @@ public:
         PRINT,
         IF,
         ELSE,
+        WHILE,
+        FOR,
 
         PLUS,   /// +
         MINUS,  /// -
@@ -43,6 +45,9 @@ public:
 
         LPAREN, /// (
         RPAREN, /// )
+        LBRACE, /// {
+        RBRACE, /// }
+        COMMA,  /// ,
 
         TOKEN_EOF
     };

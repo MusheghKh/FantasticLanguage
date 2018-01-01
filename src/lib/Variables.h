@@ -14,10 +14,7 @@
 class Variables{
 public:
 
-    static Variables& instance(){
-        static Variables s;
-        return s;
-    }
+    static Variables * instance();
 
     bool exist(const std::string &key);
 
@@ -30,6 +27,7 @@ public:
     Variables& operator= (Variables const&) = delete;
 
 private:
+
     /// PRIVATE CONSTRUCTOR, DESTRUCTOR
     Variables() = default;
     ~Variables() = default;
@@ -40,6 +38,9 @@ private:
             {"E", new NumberValue(M_E)}
     };
 };
+
+/// Singleton
+static Variables *singleton = nullptr;
 
 static const NumberValue * ZERO = new NumberValue(0);
 

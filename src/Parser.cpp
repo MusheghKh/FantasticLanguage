@@ -11,6 +11,8 @@
 #include "ast/ValueExpression.h"
 #include "ast/IfStatement.h"
 #include "ast/ConditionalExpression.h"
+#include "ast/WhileStatement.h"
+#include "ast/ForStatement.h"
 
 using std::vector;
 using std::string;
@@ -19,37 +21,53 @@ Parser::Parser(const std::vector<Token *>& tokensIn) : tokens(tokensIn) {
 }
 
 Parser::~Parser() {
-    for (auto stat = statements.begin(); stat < statements.end(); ++stat) {
-        delete *stat;
-    }
     /// Tokens will delete in Lexer cause it reference to Lexer value
-//    for (auto token = tokens.begin(); token < tokens.end(); ++token) {
-//        delete *token;
-//    }
     delete EOF_TOKEN;
-
     std::cout << "destruct Parser" << std::endl;
 }
 
-const std::vector<Statement *>& Parser::parse() {
+const BlockStatement Parser::parse() {
+    BlockStatement program;
     while (!match(Token::TOKEN_EOF)) {
-        Statement *stat = statement();
-        statements.push_back(stat);
+        const Statement *stat = statement();
+        program.add(stat);
     }
-    return statements;
+    return program;
 }
 
-Statement *Parser::statement() {
+const Statement *Parser::block() {
+    auto *block = new BlockStatement();
+    consume(Token::LBRACE);
+    while (!match(Token::RBRACE)){
+        block->add(statement());
+    }
+    return block;
+}
+
+const Statement *Parser::statementOrBlock() {
+    if (get(0)->getType() == Token::LBRACE){
+        return block();
+    }
+    return statement();
+}
+
+const Statement *Parser::statement() {
     if (match(Token::PRINT)){
         return new PrintStatement(expression());
     }
     if (match(Token::IF)){
         return ifElse();
     }
+    if (match(Token::WHILE)){
+        return whileStatement();
+    }
+    if (match(Token::FOR)){
+        return forStatement();
+    }
     return assignmentStatement();
 }
 
-Statement *Parser::assignmentStatement() {
+const Statement *Parser::assignmentStatement() {
     const Token * current = get(0);
     if (match(Token::WORD) && get(0)->getType() == Token::EQ){
         const string &variable = current->getText();
@@ -59,22 +77,39 @@ Statement *Parser::assignmentStatement() {
     throw std::runtime_error("Unknown statement");
 }
 
-Statement *Parser::ifElse() {
+const Statement *Parser::ifElse() {
     const Expression* condition = expression();
-    const Statement* ifStatement = statement();
+    const Statement* ifStatement = statementOrBlock();
 
     if (match(Token::ELSE)){
-        return new IfStatement(condition, ifStatement, statement());
+        return new IfStatement(condition, ifStatement, statementOrBlock());
     }
     return new IfStatement(condition, ifStatement);
 }
 
-Expression *Parser::expression() {
+const Statement *Parser::whileStatement() {
+    const Expression *condition = expression();
+    const Statement *body = statementOrBlock();
+    return new WhileStatement(condition, body);
+}
+
+const Statement *Parser::forStatement() {
+    const Statement *initialization = assignmentStatement();
+    consume(Token::COMMA);
+    const Expression *termination = expression();
+    consume(Token::COMMA);
+    const Statement *increment = assignmentStatement();
+    const Statement *body = statementOrBlock();
+    return new ForStatement(initialization, termination, increment, body);
+}
+
+
+const Expression *Parser::expression() {
     return logicalOr();
 }
 
-Expression *Parser::logicalOr() {
-    Expression *result = logicalAnd();
+const Expression *Parser::logicalOr() {
+    const Expression *result = logicalAnd();
 
     while (true){
         if (match(Token::BARBAR)){
@@ -86,8 +121,8 @@ Expression *Parser::logicalOr() {
     return result;
 }
 
-Expression *Parser::logicalAnd() {
-    Expression *result = equality();
+const Expression *Parser::logicalAnd() {
+    const Expression *result = equality();
 
     while (true){
         if (match(Token::AMPAMP)){
@@ -100,8 +135,8 @@ Expression *Parser::logicalAnd() {
     return result;
 }
 
-Expression *Parser::equality() {
-    Expression *result = conditional();
+const Expression *Parser::equality() {
+    const Expression *result = conditional();
 
     if (match(Token::EQEQ)){
         return new ConditionalExpression(ConditionalExpression::EQUALS, result, conditional());
@@ -113,8 +148,8 @@ Expression *Parser::equality() {
     return result;
 }
 
-Expression *Parser::conditional() {
-    Expression *result = additive();
+const Expression *Parser::conditional() {
+    const Expression *result = additive();
 
     while (true){
         if (match(Token::LT)){
@@ -139,9 +174,8 @@ Expression *Parser::conditional() {
     return result;
 }
 
-
-Expression *Parser::additive() {
-    Expression *result = multiplicative();
+const Expression *Parser::additive() {
+    const Expression *result = multiplicative();
 
     while (true) {
         if (match(Token::PLUS)) {
@@ -157,8 +191,8 @@ Expression *Parser::additive() {
     return result;
 }
 
-Expression *Parser::multiplicative() {
-    Expression *result = unary();
+const Expression *Parser::multiplicative() {
+    const Expression *result = unary();
 
     while (true) {
         if (match(Token::STAR)) {
@@ -175,7 +209,7 @@ Expression *Parser::multiplicative() {
     return result;
 }
 
-Expression *Parser::unary() {
+const Expression *Parser::unary() {
     if (match(Token::MINUS)) {
         return new UnaryExpression('-', primary());
     }
@@ -186,7 +220,7 @@ Expression *Parser::unary() {
 }
 
 
-Expression *Parser::primary() {
+const Expression *Parser::primary() {
     const Token *current = get(0);
     if (match(Token::NUMBER)) {
         return new ValueExpression(std::stod(current->getText()));
@@ -201,7 +235,7 @@ Expression *Parser::primary() {
         return new ValueExpression(current->getText());
     }
     if (match(Token::LPAREN)) {
-        Expression *result = expression();
+        const Expression *result = expression();
         match(Token::RPAREN);
         return result;
     }

@@ -24,6 +24,8 @@ const std::string Token::typeToString(TokenType typeIn) {
         case PRINT: return "PRINT";
         case IF: return "IF";
         case ELSE: return "ELSE";
+        case WHILE: return "WHILE";
+        case FOR: return "FOR";
         case PLUS: return  "PLUS";
         case MINUS: return "MINUS";
         case STAR: return "STAR";
@@ -42,6 +44,9 @@ const std::string Token::typeToString(TokenType typeIn) {
         case AMPAMP: return "AMPAMP";
         case LPAREN: return "LPAREN";
         case RPAREN: return "RPAREN";
+        case LBRACE: return "LBRACE";
+        case RBRACE: return "RBRACE";
+        case COMMA: return "COMMA";
         case TOKEN_EOF: return "EOF";
         default:
             return  "UNKNOWN_TOKEN";

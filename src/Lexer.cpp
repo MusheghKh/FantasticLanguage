@@ -121,6 +121,10 @@ void Lexer::tokenizeWord() {
         addToken(Token::IF);
     } else if (word == "else") {
         addToken(Token::ELSE);
+    } else if(word == "while"){
+        addToken(Token::WHILE);
+    } else if(word == "for"){
+        addToken(Token::FOR);
     } else {
         addToken(Token::WORD, word);
     }
@@ -144,6 +148,7 @@ void Lexer::tokenizeMultilineComment() {
         if (current == '*' && peek(1) == '/'){
             break;
         }
+        current = next();
     }
     step(2);
 }

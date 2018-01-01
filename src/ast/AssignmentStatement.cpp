@@ -13,7 +13,7 @@ AssignmentStatement::AssignmentStatement(std::string variableIn, const Expressio
 
 void AssignmentStatement::execute() const {
     const Value * result = expr->eval();
-    Variables::instance().set(variable, result);
+    Variables::instance()->set(variable, result);
 }
 
 std::string AssignmentStatement::toString() const {

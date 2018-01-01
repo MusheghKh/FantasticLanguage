@@ -63,14 +63,7 @@ private:
 };
 
 /// Static
-static const std::string OPERATOR_CHARS = "+-*/()=<>!&|";
-//static const Token::TokenType OPERATOR_TOKENS[9] = {
-//        Token::PLUS, Token::MINUS,
-//        Token::STAR, Token::SLASH,
-//        Token::LPAREN, Token::RPAREN,
-//        Token::EQ, Token::LT,
-//        Token::GT
-//};
+static const std::string OPERATOR_CHARS = "+-*/(){}=<>!&|,";
 static const std::map<std::string, Token::TokenType> OPERATORS = {
         {"+", Token::PLUS},
         {"-", Token::MINUS},
@@ -78,9 +71,12 @@ static const std::map<std::string, Token::TokenType> OPERATORS = {
         {"/", Token::SLASH},
         {"(", Token::LPAREN},
         {")", Token::RPAREN},
+        {"{", Token::LBRACE},
+        {"}", Token::RBRACE},
         {"=", Token::EQ},
         {"<", Token::LT},
         {">", Token::GT},
+        {",", Token::COMMA},
 
         {"!", Token::EXCL},
         {"&", Token::AMP},
