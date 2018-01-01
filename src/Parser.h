@@ -36,6 +36,8 @@ private:
 
     const Statement * whileStatement();
 
+    const Statement * doWhileStatement();
+
     const Statement * forStatement();
 
     const Expression * expression();

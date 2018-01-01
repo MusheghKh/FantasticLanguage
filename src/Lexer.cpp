@@ -125,6 +125,12 @@ void Lexer::tokenizeWord() {
         addToken(Token::WHILE);
     } else if(word == "for"){
         addToken(Token::FOR);
+    } else if(word =="do"){
+        addToken(Token::DO);
+    } else if(word =="break"){
+        addToken(Token::BREAK);
+    } else if(word =="continue"){
+        addToken(Token::CONTINUE);
     } else {
         addToken(Token::WORD, word);
     }
@@ -156,32 +162,32 @@ void Lexer::tokenizeMultilineComment() {
 void Lexer::tokenizeText() {
     step(1);
     stringstream ss;
-    char currnet = peek(0);
+    char current = peek(0);
     while (true) {
-        if (currnet == '\\') {
-            currnet = next();
-            switch (currnet) {
+        if (current == '\\') {
+            current = next();
+            switch (current) {
                 case '"':
-                    currnet = next();
+                    current = next();
                     ss << '"';
                     continue;
                 case 'n':
-                    currnet = next();
+                    current = next();
                     ss << '\n';
                     continue;
                 case 't':
-                    currnet = next();
+                    current = next();
                     ss << '\t';
                     continue;
             }
             ss << '\\';
             continue;
         }
-        if (currnet == '"') {
+        if (current == '"') {
             break;
         }
-        ss << currnet;
-        currnet = next();
+        ss << current;
+        current = next();
     }
     next();
 

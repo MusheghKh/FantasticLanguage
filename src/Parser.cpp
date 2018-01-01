@@ -13,6 +13,9 @@
 #include "ast/ConditionalExpression.h"
 #include "ast/WhileStatement.h"
 #include "ast/ForStatement.h"
+#include "ast/BreakStatement.h"
+#include "ast/ContinueStatement.h"
+#include "ast/DoWhileStatement.h"
 
 using std::vector;
 using std::string;
@@ -64,6 +67,15 @@ const Statement *Parser::statement() {
     if (match(Token::FOR)){
         return forStatement();
     }
+    if (match(Token::DO)){
+        return doWhileStatement();
+    }
+    if (match(Token::BREAK)){
+        return new BreakStatement();
+    }
+    if (match(Token::CONTINUE)){
+        return new ContinueStatement();
+    }
     return assignmentStatement();
 }
 
@@ -91,6 +103,13 @@ const Statement *Parser::whileStatement() {
     const Expression *condition = expression();
     const Statement *body = statementOrBlock();
     return new WhileStatement(condition, body);
+}
+
+const Statement *Parser::doWhileStatement() {
+    const Statement *statement = statementOrBlock();
+    consume(Token::WHILE);
+    const Expression *condition = expression();
+    return new DoWhileStatement(condition, statement);
 }
 
 const Statement *Parser::forStatement() {

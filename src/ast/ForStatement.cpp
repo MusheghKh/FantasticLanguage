@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "ForStatement.h"
+#include "BreakStatement.h"
+#include "ContinueStatement.h"
 
 using std::cout;
 using std::endl;
@@ -24,7 +26,11 @@ ForStatement::~ForStatement() {
 
 void ForStatement::execute() const {
     for (initialization->execute(); termination->eval()->asNumber() != 0 ; increment->execute()) {
-        body->execute();
+        try {
+            body->execute();
+        }catch (BreakStatement &bs){
+            break;
+        }catch (ContinueStatement &cs){}
     }
 }
 

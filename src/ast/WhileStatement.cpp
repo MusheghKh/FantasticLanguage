@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "WhileStatement.h"
+#include "BreakStatement.h"
+#include "ContinueStatement.h"
 
 using std::cout;
 using std::endl;
@@ -20,7 +22,11 @@ WhileStatement::~WhileStatement() {
 
 void WhileStatement::execute() const {
     while (condition->eval()->asNumber() != 0){
-        body->execute();
+        try {
+            body->execute();
+        }catch (BreakStatement &bs){
+            break;
+        }catch (ContinueStatement &cs){}
     }
 }
 

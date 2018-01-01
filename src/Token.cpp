@@ -26,6 +26,9 @@ const std::string Token::typeToString(TokenType typeIn) {
         case ELSE: return "ELSE";
         case WHILE: return "WHILE";
         case FOR: return "FOR";
+        case DO: return "DO";
+        case BREAK: return "BREAK";
+        case CONTINUE: return "CONTINUE";
         case PLUS: return  "PLUS";
         case MINUS: return "MINUS";
         case STAR: return "STAR";
