@@ -64,6 +64,8 @@ namespace parser {
 
         bool match(Token::TokenType type);
 
+        bool lookMatch(unsigned long pos, Token::TokenType type);
+
         const Token *get(unsigned long relativePosition);
 
         /// Static Constant

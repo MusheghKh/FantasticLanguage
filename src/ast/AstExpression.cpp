@@ -157,7 +157,7 @@ VariableExpression::VariableExpression(string nameIn) : name(move(nameIn)) {
 
 const Value * VariableExpression::eval() const {
     if (!Variables::instance()->exist(name)){
-        throw runtime_error("Constant does not exists");
+        throw runtime_error("Variable does not exists");
     }
     return Variables::instance()->get(name);
 }

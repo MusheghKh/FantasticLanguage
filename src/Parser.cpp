@@ -35,7 +35,7 @@ const Statement *Parser::block() {
 }
 
 const Statement *Parser::statementOrBlock() {
-    if (get(0)->getType() == Token::LBRACE){
+    if (lookMatch(0, Token::LBRACE)){
         return block();
     }
     return statement();
@@ -68,7 +68,7 @@ const Statement *Parser::statement() {
 
 const Statement *Parser::assignmentStatement() {
     const Token * current = get(0);
-    if (match(Token::WORD) && get(0)->getType() == Token::EQ){
+    if (match(Token::WORD) && lookMatch(0, Token::EQ)){
         const string &variable = current->getText();
         consume(Token::EQ);
         return new AssignmentStatement(variable, expression());
@@ -255,6 +255,10 @@ const Token *Parser::consume(Token::TokenType type) {
     }
     pos++;
     return current;
+}
+
+bool Parser::lookMatch(unsigned long pos, Token::TokenType type) {
+    return get(pos)->getType() == type;
 }
 
 bool Parser::match(Token::TokenType type) {

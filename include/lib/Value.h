@@ -10,9 +10,11 @@
 
 using namespace std;
 
-namespace storage {
+namespace storage
+{
 
-    class Value {
+    class Value
+    {
     public:
 
         virtual ~Value() = 0;
@@ -24,7 +26,8 @@ namespace storage {
         virtual string toString() const = 0;
     };
 
-    class StringValue : public Value {
+    class StringValue : public Value
+    {
     public:
         explicit StringValue(string valueIn);
 
@@ -40,7 +43,8 @@ namespace storage {
         const string value;
     };
 
-    class NumberValue : public Value {
+    class NumberValue : public Value
+    {
     public:
         explicit NumberValue(double valueIn);
 
