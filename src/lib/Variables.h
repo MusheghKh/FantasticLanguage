@@ -28,20 +28,20 @@ public:
 
 private:
 
-    /// PRIVATE CONSTRUCTOR, DESTRUCTOR
-    Variables() = default;
-    ~Variables() = default;
+    const NumberValue * ZERO = new NumberValue(0);
 
     /// Variables
     std::map<std::string, const Value*> variables = {
             {"PI", new NumberValue(M_PI)},
             {"E", new NumberValue(M_E)}
     };
+
+    /// PRIVATE CONSTRUCTOR, DESTRUCTOR
+    Variables() = default;
+    ~Variables() = default;
 };
 
 /// Singleton
-static Variables *singleton = nullptr;
-
-static const NumberValue * ZERO = new NumberValue(0);
+static Variables *singleton;
 
 #endif //OWNCPP_CONSTANTS_H
