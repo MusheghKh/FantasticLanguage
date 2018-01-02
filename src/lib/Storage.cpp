@@ -1,8 +1,14 @@
 //
-// Created by max on 12/31/17.
+// Created by max on 1/2/18.
 //
 
-#include "Variables.h"
+#include "../../include/lib/Storage.h"
+
+using namespace storage;
+
+const NumberValue* Variables::ZERO = new NumberValue(0);
+
+Variables *Variables::singleton = nullptr;
 
 Variables *Variables::instance() {
     if (singleton == nullptr){

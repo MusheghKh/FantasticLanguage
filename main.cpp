@@ -1,23 +1,16 @@
 #include <iostream>
 
-#include <vector>
+#include "include/Lexer.h"
+#include "include/Parser.h"
 
-#include "src/common_utils.h"
-#include "src/Lexer.h"
-#include "src/Parser.h"
-#include "src/lib/Variables.h"
-
-using std::string;
-using std::vector;
-using std::cout;
-using std::endl;
+using namespace parser;
 
 int main() {
 
     string rawProgram = readFile("../program.diagram");
 
     Lexer lexer(rawProgram);
-    const vector<Token*> tokens = lexer.tokenize();
+    const vector<const Token*> tokens = lexer.tokenize();
     cout << "********TOKENS START********" << endl;
     for (auto token = tokens.begin(); token < tokens.end(); ++token) {
         cout << (*token)->toString() << endl;

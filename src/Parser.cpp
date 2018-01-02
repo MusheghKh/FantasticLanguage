@@ -2,31 +2,18 @@
 // Created by max on 12/29/17.
 //
 
-#include "Parser.h"
-#include "ast/UnaryExpression.h"
-#include "ast/BinaryExpression.h"
-#include "ast/VariableExpression.h"
-#include "ast/AssignmentStatement.h"
-#include "ast/PrintStatement.h"
-#include "ast/ValueExpression.h"
-#include "ast/IfStatement.h"
-#include "ast/ConditionalExpression.h"
-#include "ast/WhileStatement.h"
-#include "ast/ForStatement.h"
-#include "ast/BreakStatement.h"
-#include "ast/ContinueStatement.h"
-#include "ast/DoWhileStatement.h"
+#include "../include/Parser.h"
 
-using std::vector;
-using std::string;
+using namespace parser;
 
-Parser::Parser(const std::vector<Token *>& tokensIn) : tokens(tokensIn) {
+const Token * Parser::EOF_TOKEN = Token::New(Token::TOKEN_EOF, "");
+
+Parser::Parser(const vector<const Token *>& tokensIn) : tokens(tokensIn) {
 }
 
 Parser::~Parser() {
     /// Tokens will delete in Lexer cause it reference to Lexer value
     delete EOF_TOKEN;
-    std::cout << "destruct Parser" << std::endl;
 }
 
 const BlockStatement Parser::parse() {
@@ -86,7 +73,7 @@ const Statement *Parser::assignmentStatement() {
         consume(Token::EQ);
         return new AssignmentStatement(variable, expression());
     }
-    throw std::runtime_error("Unknown statement");
+    throw runtime_error("Unknown statement");
 }
 
 const Statement *Parser::ifElse() {
@@ -242,10 +229,10 @@ const Expression *Parser::unary() {
 const Expression *Parser::primary() {
     const Token *current = get(0);
     if (match(Token::NUMBER)) {
-        return new ValueExpression(std::stod(current->getText()));
+        return new ValueExpression(stod(current->getText()));
     }
     if (match(Token::HEX_NUMBER)) {
-        return new ValueExpression(std::stol(current->getText(), nullptr, 16));
+        return new ValueExpression(stol(current->getText(), nullptr, 16));
     }
     if (match(Token::WORD)){
         return new VariableExpression(current->getText());
@@ -258,13 +245,13 @@ const Expression *Parser::primary() {
         match(Token::RPAREN);
         return result;
     }
-    throw std::runtime_error("Unknown expression");
+    throw runtime_error("Unknown expression");
 }
 
 const Token *Parser::consume(Token::TokenType type) {
     const Token * current = get(0);
     if (type != current->getType()){
-        throw std::runtime_error("Token " + current->toString() + " doesn't match " + Token::typeToString(type));
+        throw runtime_error("Token " + current->toString() + " doesn't match " + Token::typeToString(type));
     }
     pos++;
     return current;

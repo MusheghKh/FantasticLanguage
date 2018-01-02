@@ -2,13 +2,9 @@
 // Created by max on 12/29/17.
 //
 
-#include "Token.h"
+#include "../include/Token.h"
 
-#include "common_utils.h"
-
-#include "sstream"
-
-using std::stringstream;
+using namespace parser;
 
 Token::Token(Token::TokenType typeIn, std::string textIn)
         : text(std::move(textIn)), type(typeIn){

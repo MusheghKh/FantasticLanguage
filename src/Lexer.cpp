@@ -2,24 +2,50 @@
 // Created by max on 12/29/17.
 //
 
-#include "Lexer.h"
+#include "../include/Lexer.h"
 
-#include <sstream>
+using namespace parser;
+/**
+ * Initialize static const memebers
+ * */
+const string Lexer::OPERATOR_CHARS = "+-*/(){}=<>!&|,";
+const map<std::string, Token::TokenType> Lexer::OPERATORS  = {
+        {"+", Token::PLUS},
+        {"-", Token::MINUS},
+        {"*", Token::STAR},
+        {"/", Token::SLASH},
+        {"(", Token::LPAREN},
+        {")", Token::RPAREN},
+        {"{", Token::LBRACE},
+        {"}", Token::RBRACE},
+        {"=", Token::EQ},
+        {"<", Token::LT},
+        {">", Token::GT},
+        {",", Token::COMMA},
 
-using std::string;
-using std::stringstream;
+        {"!", Token::EXCL},
+        {"&", Token::AMP},
+        {"|", Token::BAR},
 
-Lexer::Lexer(std::string inputIn) : input(std::move(inputIn)) {
+        {"==", Token::EQEQ},
+        {"!=", Token::EXCLEQ},
+        {"<=", Token::LTEQ},
+        {">=", Token::GTEQ},
+
+        {"&&", Token::AMPAMP},
+        {"||", Token::BARBAR}
+};
+
+Lexer::Lexer(string inputIn) : input(move(inputIn)) {
 }
 
 Lexer::~Lexer() {
     for (auto token = tokens.begin(); token < tokens.end(); ++token) {
         delete *token;
     }
-    std::cout << "destruct Lexer" << std::endl;
 }
 
-const std::vector<Token *> &Lexer::tokenize() {
+const vector<const Token *> &Lexer::tokenize() {
     while (pos < length) {
         const char current = peek(0);
         if (isdigit(current)) {
@@ -50,7 +76,7 @@ void Lexer::tokenizeNumber() {
         if (current == '.') {
             // TODO make something normal than .str()
             if (ss.str().find('.') != -1) {
-                throw std::runtime_error("Invalid float number");
+                throw runtime_error("Invalid float number");
             }
         } else if (!isdigit(current)) {
             break;
@@ -149,7 +175,7 @@ void Lexer::tokenizeMultilineComment() {
     char current = peek(0);
     while (true){
         if (current == '\0'){
-            throw std::runtime_error("Missing close tag");
+            throw runtime_error("Missing close tag");
         }
         if (current == '*' && peek(1) == '/'){
             break;
