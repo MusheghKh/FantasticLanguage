@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
-project(OwnCpp)
+project(Diagram)
 
 set(CMAKE_CXX_STANDARD 11)
 
-file(GLOB PINECONE_SRC
+file(GLOB DIAGRAM_SRC
         "include/*.h"
         "include/ast/*.h"
         "include/lib/*.h"
@@ -15,4 +15,4 @@ file(GLOB PINECONE_SRC
         "src/utils/*.cpp"
         )
 
-add_executable(OwnCpp main.cpp ${PINECONE_SRC})
+add_executable(diagram main.cpp ${DIAGRAM_SRC})
